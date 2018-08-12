@@ -885,13 +885,13 @@ var Normal = (function() {
             }
         }
     });
-    self.mappings.add("e", {
+    self.mappings.add("K", {
         annotation: "Scroll a page up",
         feature_group: 2,
         repeatIgnore: true,
         code: self.scroll.bind(self, "pageUp")
     });
-    self.mappings.add("d", {
+    self.mappings.add("J", {
         annotation: "Scroll a page down",
         feature_group: 2,
         repeatIgnore: true,
@@ -921,18 +921,18 @@ var Normal = (function() {
         repeatIgnore: true,
         code: self.scroll.bind(self, "up")
     });
-    self.mappings.add("h", {
-        annotation: "Scroll left",
-        feature_group: 2,
-        repeatIgnore: true,
-        code: self.scroll.bind(self, "left")
-    });
-    self.mappings.add("l", {
-        annotation: "Scroll right",
-        feature_group: 2,
-        repeatIgnore: true,
-        code: self.scroll.bind(self, "right")
-    });
+    // self.mappings.add("h", {
+    //     annotation: "Scroll left",
+    //     feature_group: 2,
+    //     repeatIgnore: true,
+    //     code: self.scroll.bind(self, "left")
+    // });
+    // self.mappings.add("l", {
+    //     annotation: "Scroll right",
+    //     feature_group: 2,
+    //     repeatIgnore: true,
+    //     code: self.scroll.bind(self, "right")
+    // });
     self.mappings.add("0", {
         annotation: "Scroll all the way to the left",
         feature_group: 2,
@@ -961,11 +961,20 @@ var Normal = (function() {
     });
 
     self.mappings.add("f", {
-        annotation: "Open a link, press SHIFT to flip hints if they are overlapped.",
+        annotation: "Open a link with left hand keys",
         feature_group: 1,
         repeatIgnore: true,
         code: function() {
-            Hints.create("", Hints.dispatchMouseClick);
+            Hints.create("", Hints.dispatchMouseClick, {}, 'left');
+        }
+    });
+
+    self.mappings.add("p", {
+        annotation: "Open a link with right hand keys",
+        feature_group: 1,
+        repeatIgnore: true,
+        code: function () {
+            Hints.create("", Hints.dispatchMouseClick, {}, 'right');
         }
     });
 

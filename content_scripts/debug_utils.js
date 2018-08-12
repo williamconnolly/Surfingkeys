@@ -31,6 +31,22 @@ function breakOn(property, flag, expected) {
     });
 }
 
+function logWrap(obj, withFn) {
+    var name, fn;
+    for (name in withFn) {
+        fn = window[name];
+        if (typeof fn === 'function') {
+            window[name] = (function (name, fn) {
+                var args = arguments;
+                return function () {
+                    withFn.apply(this, args);
+                    return fn.apply(this, arguments);
+                };
+            })(name, fn);
+        }
+    }
+}
+
 function stackTrace() {
     var err = new Error();
     console.log(new Date().toLocaleString());

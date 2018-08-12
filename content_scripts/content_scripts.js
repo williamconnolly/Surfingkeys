@@ -69,6 +69,12 @@ function map(new_keystroke, old_keystroke, domain, new_annotation) {
     }
 }
 
+function mapall(new_keystrokes, old_keystroke, domain, new_annotation) {
+    new_keystrokes.forEach(new_keystroke => {
+        map(new_keystroke, old_keystroke, domain, new_annotation);
+    });
+}
+
 function unmap(keystroke, domain) {
     if (!domain || domain.test(document.location.href)) {
         var old_map = Normal.mappings.find(KeyboardUtils.encodeKeystroke(keystroke));
@@ -156,41 +162,41 @@ function addSearchAliasX(alias, prompt, search_url, search_leader_key, suggestio
     function ssw() {
         searchSelectedWith(search_url);
     }
-    mapkey((search_leader_key || 's') + alias, '#6Search selected with ' + prompt, ssw);
-    vmapkey((search_leader_key || 's') + alias, '', ssw);
+    mapkey((search_leader_key || 'S') + alias, '#6Search selected with ' + prompt, ssw);
+    vmapkey((search_leader_key || 'S') + alias, '', ssw);
     function ssw2() {
         searchSelectedWith(search_url, true);
     }
-    mapkey((search_leader_key || 's') + (only_this_site_key || 'o') + alias, '', ssw2);
-    vmapkey((search_leader_key || 's') + (only_this_site_key || 'o') + alias, '', ssw2);
+    mapkey((search_leader_key || 'S') + (only_this_site_key || 'o') + alias, '', ssw2);
+    vmapkey((search_leader_key || 'S') + (only_this_site_key || 'o') + alias, '', ssw2);
 
     var capitalAlias = alias.toUpperCase();
     if (capitalAlias !== alias) {
         function ssw4() {
             searchSelectedWith(search_url, false, true, alias);
         }
-        mapkey((search_leader_key || 's') + capitalAlias, '', ssw4);
-        vmapkey((search_leader_key || 's') + capitalAlias, '', ssw4);
+        mapkey((search_leader_key || 'S') + capitalAlias, '', ssw4);
+        vmapkey((search_leader_key || 'S') + capitalAlias, '', ssw4);
         function ssw5() {
             searchSelectedWith(search_url, true, true, alias);
         }
-        mapkey((search_leader_key || 's') + (only_this_site_key || 'o') + capitalAlias, '', ssw5);
-        vmapkey((search_leader_key || 's') + (only_this_site_key || 'o') + capitalAlias, '', ssw5);
+        mapkey((search_leader_key || 'S') + (only_this_site_key || 'o') + capitalAlias, '', ssw5);
+        vmapkey((search_leader_key || 'S') + (only_this_site_key || 'o') + capitalAlias, '', ssw5);
     }
 }
 
 function removeSearchAliasX(alias, search_leader_key, only_this_site_key) {
     removeSearchAlias(alias);
-    unmap((search_leader_key || 's') + alias);
-    vunmap((search_leader_key || 's') + alias);
-    unmap((search_leader_key || 's') + (only_this_site_key || 'o') + alias);
-    vunmap((search_leader_key || 's') + (only_this_site_key || 'o') + alias);
+    unmap((search_leader_key || 'S') + alias);
+    vunmap((search_leader_key || 'S') + alias);
+    unmap((search_leader_key || 'S') + (only_this_site_key || 'o') + alias);
+    vunmap((search_leader_key || 'S') + (only_this_site_key || 'o') + alias);
     var capitalAlias = alias.toUpperCase();
     if (capitalAlias !== alias) {
-        unmap((search_leader_key || 's') + capitalAlias);
-        vunmap((search_leader_key || 's') + capitalAlias);
-        unmap((search_leader_key || 's') + (only_this_site_key || 'o') + capitalAlias);
-        vunmap((search_leader_key || 's') + (only_this_site_key || 'o') + capitalAlias);
+        unmap((search_leader_key || 'S') + capitalAlias);
+        vunmap((search_leader_key || 'S') + capitalAlias);
+        unmap((search_leader_key || 'S') + (only_this_site_key || 'o') + capitalAlias);
+        vunmap((search_leader_key || 'S') + (only_this_site_key || 'o') + capitalAlias);
     }
 }
 

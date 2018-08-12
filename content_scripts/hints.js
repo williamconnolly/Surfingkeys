@@ -56,7 +56,7 @@ var Hints = (function() {
                             refreshByTextFilter();
                         }
                         handleHint();
-                    } else if (self.characters.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
+                    } else if (self.characters().indexOf(key.toLowerCase()) !== -1) {
                         prefix = prefix + key.toUpperCase();
                         handleHint();
                     } else {
@@ -86,11 +86,16 @@ var Hints = (function() {
         },
         holder = createElement('<div id="sk_hints" style="display: block; opacity: 1;"/>'),
         shiftKey = false;
-    self.characters = 'asdfgqwertzxcvb';
-    self.scrollKeys = '0jkhlG$';
+    self.characterSets = {
+        left: 'asdfgwertzxcvb',
+        right: 'yuiophlbgnm',
+        numeric: '1234567890'
+    };
+    self.scrollKeys = '0jk';
     var _lastCreateAttrs = {},
         _onHintKey = self.dispatchMouseClick,
-        _cssSelector = "";
+        _cssSelector = "",
+        _characterSet = 'left';
 
     function isCapital(key) {
         return key === key.toUpperCase() &&
@@ -239,22 +244,23 @@ var Hints = (function() {
         document.removeEventListener("surfingkeys:scrollDone", resetHints);
     };
 
-    self.genLabels = function(M) {
-        if (M <= self.characters.length) {
-            return self.characters.slice(0, M).toUpperCase().split('');
+    self.genLabels = function (M) {
+        var charSet = self.characters();
+        if (M <= charSet.length) {
+            return charSet.slice(0, M).toUpperCase().split('');
         }
         var codes = [];
         var genCodeWord = function(N, length) {
             for (var i = 0, word = ''; i < length; i++) {
-                word += self.characters.charAt(N % self.characters.length).toUpperCase();
-                N = ~~(N / self.characters.length);
+                word += charSet.charAt(N % charSet.length).toUpperCase();
+                N = ~~(N / charSet.length);
             }
             codes.push(word.split('').reverse().join(''));
         };
 
-        var b = Math.ceil(Math.log(M) / Math.log(self.characters.length));
-        var cutoff = Math.pow(self.characters.length, b) - M;
-        var cutoffR = ~~(cutoff / (self.characters.length - 1));
+        var b = Math.ceil(Math.log(M) / Math.log(charSet.length));
+        var cutoff = Math.pow(charSet.length, b) - M;
+        var cutoffR = ~~(cutoff / (charSet.length - 1));
 
         for (var i = 0; i < cutoffR; i++) {
             genCodeWord(i, b - 1);
@@ -470,6 +476,15 @@ var Hints = (function() {
         return (cssSelector.constructor.name === "RegExp") ? createHintsForTextNode(cssSelector, attrs) : createHintsForClick(cssSelector, attrs);
     }
 
+    self.characters = function () {
+        let charSetOrDefault = self.characterSets.left;
+        if (_characterSet in self.characterSets) {
+            charSetOrDefault = self.characterSets[_characterSet];
+        }
+        // leave default functionality alone
+        return charSetOrDefault.toLowerCase();
+    };
+      
     self.createInputLayer = function() {
         var cssSelector = "input";
 
@@ -522,9 +537,11 @@ var Hints = (function() {
         return _cssSelector;
     };
 
-    self.create = function(cssSelector, onHintKey, attrs) {
+    self.create = function (cssSelector, onHintKey, attrs, selectedChars) {
+        console.log("Creating hints... selChrs: ", selectedChars, " with attrs: ", attrs);
+        _characterSet = selectedChars in self.characterSets ? selectedChars : 'left';
         if (self.numericHints) {
-            self.characters = "1234567890";
+            _characterSet = 'numeric';
         }
 
         // save last used attributes, which will be reused if the user scrolls while the hints are still open

@@ -27,44 +27,44 @@ imapkey('<Ctrl-i>', '#15Open vim editor for current input', function() {
     Insert.exit();
     Front.showEditor(element);
 });
-function toggleProxySite(host) {
-    RUNTIME('updateProxy', {
-        host: host,
-        operation: "toggle"
-    });
-    return true;
-}
-mapkey('cp', '#13Toggle proxy for current site', function() {
-    var host = window.location.host.replace(/:\d+/,'');
-    if (host && host.length) {
-        toggleProxySite(host);
-    }
-});
-mapkey(';cp', '#13Copy proxy info', function() {
-    runtime.command({
-        action: 'getSettings',
-        key: ['proxyMode', 'proxy', 'autoproxy_hosts']
-    }, function(response) {
-        Clipboard.write(JSON.stringify(response.settings, null, 4));
-    });
-});
-mapkey(';ap', '#13Apply proxy info from clipboard', function() {
-    Clipboard.read(function(response) {
-        var proxyConf = JSON.parse(response.data);
-        RUNTIME('updateProxy', {
-            host: proxyConf.autoproxy_hosts.join(","),
-            operation: 'add',
-            proxy: proxyConf.proxy,
-            mode: proxyConf.proxyMode
-        });
-    });
-});
+// function toggleProxySite(host) {
+//     RUNTIME('updateProxy', {
+//         host: host,
+//         operation: "toggle"
+//     });
+//     return true;
+// }
+// mapkey('cp', '#13Toggle proxy for current site', function() {
+//     var host = window.location.host.replace(/:\d+/,'');
+//     if (host && host.length) {
+//         toggleProxySite(host);
+//     }
+// });
+// mapkey(';cp', '#13Copy proxy info', function() {
+//     runtime.command({
+//         action: 'getSettings',
+//         key: ['proxyMode', 'proxy', 'autoproxy_hosts']
+//     }, function(response) {
+//         Clipboard.write(JSON.stringify(response.settings, null, 4));
+//     });
+// });
+// mapkey(';ap', '#13Apply proxy info from clipboard', function() {
+//     Clipboard.read(function(response) {
+//         var proxyConf = JSON.parse(response.data);
+//         RUNTIME('updateProxy', {
+//             host: proxyConf.autoproxy_hosts.join(","),
+//             operation: 'add',
+//             proxy: proxyConf.proxy,
+//             mode: proxyConf.proxyMode
+//         });
+//     });
+// });
 // create shortcuts for the command with different parameters
-map('spa', ':setProxyMode always', 0, '#13set proxy mode `always`');
-map('spb', ':setProxyMode byhost', 0, '#13set proxy mode `byhost`');
-map('spd', ':setProxyMode direct', 0, '#13set proxy mode `direct`');
-map('sps', ':setProxyMode system', 0, '#13set proxy mode `system`');
-map('spc', ':setProxyMode clear', 0, '#13set proxy mode `clear`');
+// map('spa', ':setProxyMode always', 0, '#13set proxy mode `always`');
+// map('spb', ':setProxyMode byhost', 0, '#13set proxy mode `byhost`');
+// map('spd', ':setProxyMode direct', 0, '#13set proxy mode `direct`');
+// map('sps', ':setProxyMode system', 0, '#13set proxy mode `system`');
+// map('spc', ':setProxyMode clear', 0, '#13set proxy mode `clear`');
 mapkey('gr', '#14Read selected text or text from clipboard', function() {
     Clipboard.read(function(response) {
         readText(window.getSelection().toString() || response.data, {verbose: true});
@@ -73,7 +73,7 @@ mapkey('gr', '#14Read selected text or text from clipboard', function() {
 vmapkey('gr', '#9Read selected text', function() {
     readText(window.getSelection().toString(), {verbose: true});
 });
-mapkey('sfr', '#13show failed web requests of current page', function() {
+mapkey(';fr', '#13show failed web requests of current page', function() {
     runtime.command({
         action: 'getTabErrors'
     }, function(response) {
@@ -95,20 +95,20 @@ mapkey('zr', '#3zoom reset', function() {
         zoomFactor: 0
     });
 });
-mapkey('zi', '#3zoom in', function() {
+mapkey('z=', '#3zoom in', function() {
     RUNTIME('setZoom', {
         zoomFactor: 0.1
     });
 });
-mapkey('zo', '#3zoom out', function() {
+mapkey('z-', '#3zoom out', function() {
     RUNTIME('setZoom', {
         zoomFactor: -0.1
     });
 });
 
-map('ZQ', ':quit');
-mapkey(".", '#0Repeat last action', Normal.repeatLast, {repeatIgnore: true});
-mapkey("sql", '#0Show last action', function() {
+// map('ZQ', ':quit');
+mapkey("!!", '#0Repeat last action', Normal.repeatLast, {repeatIgnore: true});
+mapkey("!", '#0Show last action', function() {
     Front.showPopup(htmlEncode(runtime.conf.lastKeys.map(function(k) {
         return KeyboardUtils.decodeKeystroke(k);
     }).join(' → ')));
@@ -130,10 +130,9 @@ mapkey('T', '#3Choose a tab', function() {
 mapkey('?', '#0Show usage', function() {
     Front.showUsage();
 });
-map('u', 'e');
-mapkey('af', '#1Open a link in new tab', function() {
-    Hints.create("", Hints.dispatchMouseClick, {tabbed: true});
-});
+// mapkey('af', '#1Open a link in new tab', function() {
+//     Hints.create("", Hints.dispatchMouseClick, {tabbed: true});
+// });
 mapkey('gf', '#1Open a link in non-active new tab', function() {
     Hints.create("", Hints.dispatchMouseClick, {tabbed: true, active: false});
 });
@@ -264,7 +263,7 @@ mapkey('B', '#4Go one tab history back', function() {
 mapkey('F', '#4Go one tab history forward', function() {
     RUNTIME("historyTab", {backward: false});
 }, {repeatIgnore: true});
-mapkey('<Ctrl-6>', '#4Go to last used tab', function() {
+mapkey('<Ctrl-q>', '#4Go to last used tab', function() {
     RUNTIME("goToLastTab");
 });
 mapkey('gT', '#4Go to first activated tab', function() {
@@ -273,10 +272,10 @@ mapkey('gT', '#4Go to first activated tab', function() {
 mapkey('gt', '#4Go to last activated tab', function() {
     RUNTIME("historyTab", {index: -1});
 }, {repeatIgnore: true});
-mapkey('S', '#4Go back in history', function() {
+mapkey('a', '#4Go back in history', function() {
     history.go(-1);
 }, {repeatIgnore: true});
-mapkey('D', '#4Go forward in history', function() {
+mapkey('d', '#4Go forward in history', function() {
     history.go(1);
 }, {repeatIgnore: true});
 mapkey('r', '#4Reload the page', function() {
@@ -300,19 +299,19 @@ mapkey('ox', '#8Open recently closed URL', function() {
 mapkey('H', '#8Open opened URL in current tab', function() {
     Front.openOmnibar({type: "URLs", extra: "getTabURLs"});
 });
-mapkey('Q', '#8Open omnibar for word translation', function() {
-    Front.openOmniquery({query: Visual.getWordUnderCursor(), style: "opacity: 0.8;"});
-});
-mapkey('b', '#8Open a bookmark', function() {
-    Front.openOmnibar(({type: "Bookmarks"}));
-});
-mapkey('ab', '#8Bookmark current page to selected folder', function() {
-    var page = {
-        url: window.location.href,
-        title: document.title
-    };
-    Front.openOmnibar(({type: "AddBookmark", extra: page}));
-});
+// mapkey('Q', '#8Open omnibar for word translation', function() {
+//     Front.openOmniquery({query: Visual.getWordUnderCursor(), style: "opacity: 0.8;"});
+// });
+// mapkey('b', '#8Open a bookmark', function() {
+//     Front.openOmnibar(({type: "Bookmarks"}));
+// });
+// mapkey('ab', '#8Bookmark current page to selected folder', function() {
+//     var page = {
+//         url: window.location.href,
+//         title: document.title
+//     };
+//     Front.openOmnibar(({type: "AddBookmark", extra: page}));
+// });
 mapkey('oh', '#8Open URL from history', function() {
     Front.openOmnibar({type: "History"});
 });
@@ -363,18 +362,15 @@ mapkey("'", '#10Jump to vim-like mark', Normal.jumpVIMark);
 mapkey("<Ctrl-'>", '#10Jump to vim-like mark in new tab.', function(mark) {
     Normal.jumpVIMark(mark, true);
 });
-mapkey('<<', '#3Move current tab to left', function() {
+mapkey('<', '#3Move current tab to left', function() {
     RUNTIME('moveTab', {
         step: -1
     });
 });
-mapkey('>>', '#3Move current tab to right', function() {
+mapkey('>', '#3Move current tab to right', function() {
     RUNTIME('moveTab', {
         step: 1
     });
-});
-mapkey('w', '#2Switch frames', function() {
-    Normal.rotateFrame();
 });
 mapkey(';w', '#2Focus top window', function() {
     top.focus();
@@ -522,12 +518,15 @@ if (window.navigator.userAgent.indexOf("Firefox") > 0) {
     mapkey('gn', '#12Open Chrome net-internals', function() {
         tabOpenLink("chrome://net-internals/#proxy");
     });
-    mapkey('si', '#12Open Chrome Inspect', function() {
+    mapkey('gI', '#12Open Chrome Inspect', function() {
         tabOpenLink("chrome://inspect/#devices");
     });
 }
-mapkey('gs', '#12View page source', function() {
+mapkey('gS', '#12View page source', function() {
     RUNTIME("viewSource", { tab: { tabbed: true }});
+});
+mapkey('gS', '#12View extension settings', function () {
+    tabOpenLink("chrome-extension://daiegoepbaodmiadfkfnienokehllahk/pages/options.html");
 });
 mapkey('gu', '#4Go up one path in the URL', function() {
     var pathname = location.pathname;
@@ -547,10 +546,10 @@ mapkey('gu', '#4Go up one path in the URL', function() {
     }
     window.location.href = location.origin + pathname;
 });
-mapkey('g?', '#4Reload current page without query string(all parts after question mark)', function() {
+mapkey('g?', '#4Reload page without query string', function() {
     window.location.href = window.location.href.replace(/\?[^\?]*$/, '');
 });
-mapkey('gU', '#4Go to root of current URL hierarchy', function() {
+mapkey('gU', '#4Go to domain root of URL', function() {
     window.location.href = window.location.origin;
 });
 mapkey('gxt', '#3Close tab on left', function() {
@@ -565,25 +564,31 @@ mapkey('gx0', '#3Close all tabs on left', function() {
 mapkey('gx$', '#3Close all tabs on right', function() {
     RUNTIME("closeTabsToRight");
 });
-mapkey('se', '#11Edit Settings', function() {
-    tabOpenLink("/pages/options.html");
+mapkey('gxp', '#3Close all unpinned tabs', function () {
+    RUNTIME("closeTabsNotPinned");
 });
-mapkey('sm', '#11Preview markdown', function() {
-    tabOpenLink("/pages/markdown.html");
+mapkey('gxP', '#3Close all pinned tabs', function () {
+    RUNTIME("closeTabsPinned");
 });
+// mapkey('se', '#11Edit Settings', function() {
+//     tabOpenLink("/pages/options.html");
+// });
+// mapkey('sm', '#11Preview markdown', function() {
+//     tabOpenLink("/pages/markdown.html");
+// });
 mapkey('<Ctrl-Alt-d>', '#11Mermaid diagram generator', function() {
     tabOpenLink("/pages/mermaid.html");
 });
-mapkey('su', '#4Edit current URL with vim editor, and open in new tab', function() {
-    Front.showEditor(window.location.href, function(data) {
-        tabOpenLink(data);
-    }, 'url');
-});
-mapkey('sU', '#4Edit current URL with vim editor, and reload', function() {
-    Front.showEditor(window.location.href, function(data) {
-        window.location.href = data;
-    }, 'url');
-});
+// mapkey('su', '#4Edit current URL with vim editor, and open in new tab', function() {
+//     Front.showEditor(window.location.href, function(data) {
+//         tabOpenLink(data);
+//     }, 'url');
+// });
+// mapkey('sU', '#4Edit current URL with vim editor, and reload', function() {
+//     Front.showEditor(window.location.href, function(data) {
+//         window.location.href = data;
+//     }, 'url');
+// });
 mapkey(';m', '#1mouse out last element', function() {
     Hints.mouseoutLastElement();
 });
@@ -612,28 +617,22 @@ mapkey(';dh', '#14Delete history older than 30 days', function() {
 mapkey(';db', '#14Remove bookmark for current page', function() {
     RUNTIME('removeBookmark');
 });
-
-addSearchAliasX('g', 'google', 'https://www.google.com/search?q=', 's', 'https://www.google.com/complete/search?client=chrome-omni&gs_ri=chrome-ext&oit=1&cp=1&pgcl=7&q=', function(response) {
+// http: //maps.google.com/maps?q=the+omni&um=1&ie=UTF-8&sa=X&ved=0ahUKEwjytLTx2M3cAhXBqlkKHVxsCWAQ_AUICigB
+addSearchAliasX('g', 'google', 'https://www.google.com/search?q=', 'S', 'https://www.google.com/complete/search?client=chrome-omni&gs_ri=chrome-ext&oit=1&cp=1&pgcl=7&q=', function(response) {
     var res = JSON.parse(response.text);
     return res[1];
 });
-addSearchAliasX('d', 'duckduckgo', 'https://duckduckgo.com/?q=', 's', 'https://duckduckgo.com/ac/?q=', function(response) {
-    var res = JSON.parse(response.text);
-    return res.map(function(r){
-        return r.phrase;
-    });
-});
-addSearchAliasX('b', 'baidu', 'https://www.baidu.com/s?wd=', 's', 'http://suggestion.baidu.com/su?cb=&wd=', function(response) {
-    var res = response.text.match(/,s:\[("[^\]]+")]}/);
-    return res ? res[1].replace(/"/g, '').split(",") : [];
-});
-addSearchAliasX('w', 'bing', 'http://global.bing.com/search?setmkt=en-us&setlang=en-us&q=', 's', 'http://api.bing.com/osjson.aspx?query=', function(response) {
+addSearchAliasX('m', 'maps', 'https://maps.google.com/maps?q=', 'S', 'https://www.google.com/complete/search?client=chrome-omni&gs_ri=chrome-ext&oit=1&cp=1&pgcl=3&q=', function (response) {
     var res = JSON.parse(response.text);
     return res[1];
 });
-addSearchAliasX('s', 'stackoverflow', 'http://stackoverflow.com/search?q=');
+addSearchAliasX('b', 'bing', 'http://global.bing.com/search?setmkt=en-us&setlang=en-us&q=', 'S', 'http://api.bing.com/osjson.aspx?query=', function(response) {
+    var res = JSON.parse(response.text);
+    return res[1];
+});
+addSearchAliasX('s', 'stackoverflow', 'http://stackoverflow.com/search?q=', 'S');
 addSearchAliasX('h', 'github', 'https://github.com/search?type=Code&utf8=%E2%9C%93&q=');
-addSearchAliasX('y', 'youtube', 'https://www.youtube.com/results?search_query=', 's',
+addSearchAliasX('y', 'youtube', 'https://www.youtube.com/results?search_query=', 'S',
 'http://suggestqueries.google.com/complete/search?client=youtube&ds=yt&client=chrome-ext&q=', function(response) {
     var res = JSON.parse(response.text);
     return res[1];

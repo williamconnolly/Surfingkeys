@@ -791,12 +791,26 @@ var ChromeService = (function() {
         });
     };
 
+    function _closeTabsQuery(q) {
+        chrome.tabs.query(q, function (tabs) {
+            chrome.tabs.remove(tabs.map(function (e) {
+                return e.id
+            }));
+        });
+    }
+
     self.closeTabLeft  = function(message, sender, senderResponse) { _closeTab(sender, -message.repeats);};
     self.closeTabRight = function(message, sender, senderResponse) { _closeTab(sender, message.repeats); };
     self.closeTabsToLeft = function(message, sender, senderResponse) { _closeTab(sender, -sender.tab.index); };
     self.closeTabsToRight = function(message, sender, senderResponse) {
         chrome.tabs.query({currentWindow: true},
                           function(tabs) { _closeTab(sender, tabs.length - sender.tab.index); });
+    };
+    self.closeTabsNotPinned = function(message, sender, senderResponse) {
+        _closeTabsQuery({currentWindow: true, pinned: false});
+    };
+    self.closeTabsPinned = function (message, sender, senderResponse) {
+        _closeTabsQuery({currentWindow: true, pinned: true});
     };
 
     self.muteTab = function(message, sender, sendResponse) {

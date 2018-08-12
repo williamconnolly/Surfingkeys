@@ -1091,7 +1091,7 @@ var SearchEngine = (function() {
     function formatURL(url, query) {
         if (url.indexOf("%s") !== -1) {
             return url.replace("%s", query);
-        }
+        } else if (url.indexOf("$"))
         return url + query;
     }
 
