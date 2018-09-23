@@ -55,6 +55,9 @@
             "background.js"
         ]
     },
+    "chrome_url_overrides": {
+        "newtab": "pages/start.html"
+    },
     "content_scripts": [
         {
             "matches": [
