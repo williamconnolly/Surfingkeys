@@ -12,8 +12,14 @@ map("=", "z=");
 map("-", "z-"); // zoom in and out 
 map("gx4", "gx$"); // close all tabs to the right. $ is regex 'end of line' char and capital 4
 
+iunmap(":");  // disable stupid ass emoji picker
 
-Hints.scrollKeys = "0jk";
+
+mapkey('<Space>', 'Choose a tab with omnibar', function() {
+    Front.openOmnibar({type: "Tabs"});
+});
+
+
 settings.autoFocus = true;
 settings.richHintsForKeystroke = 300;
 settings.omnibarMaxResults = 20;
@@ -25,7 +31,7 @@ settings.focusFirstCandidate = true;
 settings.hintThreshold = 50;
 settings.interceptedErrors = [];
 
-/** 
+/**
  * Utility functions
  */
 const getNested = (p, o) => p.reduce((xs, x) => (xs && xs[x]) ? xs[x] : null, o);
@@ -41,7 +47,26 @@ mapkey("gs", "#14Scroll to StackOverflow answers", function () {
     window.scroll({
         behavior: 'smooth',
         top: top
-    })
+    });
+});
+
+mapkey("gmp", "#14Go to most popular", function() {
+    if (document.location.href.match(/youtube/i)) {
+        document.location.search = "?view=0&sort=p&flow=grid";
+    }
+});
+
+mapkey("gr", "#14Toggle between Continuous and Release jobs", function() {
+    var href = document.location.href;
+    if (href.match(/jenkins/i)) {
+        document.location.href = href.match(/continuous/i) ?
+            href.replace("continuous", "release") :
+            href.replace("release", "continuous");
+    } else if (href.match(/github/i)) {
+        document.location.href = href.match(/ic-backend-ui/i) ?
+            href.replace("ic-backend-ui", "ic-backend") :
+            href.replace("ic-backend", "ic-backend-ui");
+    }
 });
 
 
@@ -73,9 +98,12 @@ addSearchAlias("jira", "JIRA Search", `${jira}/browse/`, `${jira}/rest/quicksear
 });
 
 const saveKeys = ['<Ctrl-a>', '<Ctrl-d>', 'a', 'd', 't', 'x', 'w', 's', 'gg', 'G', 'i'];
-unmapAllExcept(saveKeys, /amazon\.com/i);
-unmapAllExcept(saveKeys, /youtube\.com/i);
+unmapAllExcept(saveKeys, /amazon/i);
+unmapAllExcept(['gmp', ...saveKeys], /youtube/i);
+unmapAllExcept(saveKeys, /slack/i);
+unmapAllExcept(saveKeys, /reddit/i);
 unmap('t', /github\.com/i);
+unmapAllExcept(['<Ctrl-a>', '<Ctrl-d>'], /google/i);
 
 /* TODO:
 - JIRA search
