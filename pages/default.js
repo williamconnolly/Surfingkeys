@@ -263,9 +263,9 @@ mapkey('B', '#4Go one tab history back', function() {
 mapkey('F', '#4Go one tab history forward', function() {
     RUNTIME("historyTab", {backward: false});
 }, {repeatIgnore: true});
-mapkey('<Ctrl-q>', '#4Go to last used tab', function() {
-    RUNTIME("goToLastTab");
-});
+// mapkey('<Ctrl-q>', '#4Go to last used tab', function() {
+//     RUNTIME("goToLastTab");
+// });
 mapkey('gT', '#4Go to first activated tab', function() {
     RUNTIME("historyTab", {index: 0});
 }, {repeatIgnore: true});

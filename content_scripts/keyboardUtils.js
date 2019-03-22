@@ -133,7 +133,7 @@ var KeyboardUtils = (function() {
             if (event.ctrlKey) {
                 character = "Ctrl-" + character;
             }
-            if (character.length > 1) {
+            if (character && character.length > 1) {
                 character = "<{0}>".format(character);
             }
         }
